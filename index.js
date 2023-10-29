@@ -37,7 +37,8 @@ try {
     shell_exec('git -C .ac_build pull || git clone https://gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build')
   }
 
-  shell_exec('docker pull ' + env_image)
+  shell_exec(`docker pull ${env_image}`)
+  shell_exec(`docker run --rm -v $(pwd):/opt/src/${package_name} --env PACKAGE_NAME=${package_name} --env PACKAGE_VERSION=${version} -w /opt/src/${package_name} ${env_image} bash ${build_script}`)
 
 } catch (error) {
   core.setFailed(error.message);
