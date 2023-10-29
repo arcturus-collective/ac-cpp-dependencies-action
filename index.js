@@ -79,7 +79,7 @@ try {
   shell_exec(`ls -la .ac_build/scripts`)
 
   // Now actually execute the script
-  shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, ARTIFACTORY_TOKEN: artifactory_token});
+  shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, COMPILER: build_compiler, ARTIFACTORY_TOKEN: artifactory_token});
 
 } catch (error) {
   core.setFailed(error.message);
