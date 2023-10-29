@@ -10,6 +10,12 @@ inputs:
   compiler:
     description: 'What compiler to build with'
     required: true
+  username:
+    description: 'Username used to log in to the gitea instance'
+    required: false
+  password:
+    description: 'Password or personal access token used to log to the gitea instance'
+    required: false
 runs:
   using: 'node20'
   main: 'dist/index.js'
