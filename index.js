@@ -4,7 +4,7 @@ const fs = require('fs');
 const { exec } = require("child_process")
 
 function shell_exec(cmd) {
-  exec("cmd", (error, stdout, stderr) => {
+  exec(cmd, (error, stdout, stderr) => {
     if (error) {
       throw new Error(`error: ${error.message}`)
     }

@@ -30137,7 +30137,7 @@ const fs = __nccwpck_require__(7147);
 const { exec } = __nccwpck_require__(2081)
 
 function shell_exec(cmd) {
-  exec("cmd", (error, stdout, stderr) => {
+  exec(cmd, (error, stdout, stderr) => {
     if (error) {
       throw new Error(`error: ${error.message}`)
     }
