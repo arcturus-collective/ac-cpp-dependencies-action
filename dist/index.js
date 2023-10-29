@@ -30134,12 +30134,12 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(1681);
 const github = __nccwpck_require__(7133);
 const fs = __nccwpck_require__(7147);
-const { exec } = __nccwpck_require__(2081)
+const { execSync } = __nccwpck_require__(2081)
 
 function shell_exec(cmd, env = {}) {
   console.log(`Running command ${cmd}`)
   runenv = { ...process.env, ...env };
-  exec(cmd, { env: runenv }, (error, stdout, stderr) => {
+  execSync(cmd, { env: runenv }, function(error, stdout, stderr) {
     if (error) {
       throw new Error(error.message)
     }
@@ -30147,6 +30147,7 @@ function shell_exec(cmd, env = {}) {
         console.log(`${stderr}`);
     }
     console.log(`${stdout}`);
+    console.log("Command completed successfully");
   });
 }
 

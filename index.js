@@ -1,12 +1,12 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
-const { exec } = require("child_process")
+const { execSync } = require("child_process")
 
 function shell_exec(cmd, env = {}) {
   console.log(`Running command ${cmd}`)
   runenv = { ...process.env, ...env };
-  exec(cmd, { env: runenv }, (error, stdout, stderr) => {
+  execSync(cmd, { env: runenv }, function(error, stdout, stderr) {
     if (error) {
       throw new Error(error.message)
     }
@@ -14,6 +14,7 @@ function shell_exec(cmd, env = {}) {
         console.log(`${stderr}`);
     }
     console.log(`${stdout}`);
+    console.log("Command completed successfully");
   });
 }
 
