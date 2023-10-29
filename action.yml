@@ -1,0 +1,15 @@
+name: 'Build and test C++ Project'
+description: 'Builds and tests C++ projects following a specific format.'
+inputs:
+  package_name:
+    description: 'The name of the package'
+    required: true
+  arch:
+    description: 'What architecture to build for'
+    required: true
+  compiler:
+    description: 'What compiler to build with'
+    required: true
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
