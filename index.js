@@ -15,14 +15,14 @@ function shell_exec(cmd, env = {}) {
     child.on('error', function(error) {
       reject(error)
     });
-    child.on('close', exitCode => {
-      if (exitCode == 0)
+    child.on('close', exit_code => {
+      if (exit_code == 0)
       {
         console.log(`Command completed with exit code ${exit_code}`);
-        resolve(exitCode);
+        resolve(exit_code);
       } else {
-        console.log(`Rejecting promise, process exited with code ${exitCode}`)
-        reject(`Process exited with code ${exitCode}`);
+        console.log(`Rejecting promise, process exited with code ${exit_code}`)
+        reject(`Process exited with code ${exit_code}`);
       }
     });
   });
