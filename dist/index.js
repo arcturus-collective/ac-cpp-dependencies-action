@@ -30164,12 +30164,12 @@ try {
     case "linux":
       build_os = "linux";
       script_exec = "bash";
-      script_ext = ".sh";
+      script_ext = "sh";
       break;
     case "win32":
       build_os = "windows";
       script_exec = "powershell -File";
-      script_ext = ".ps1";
+      script_ext = "ps1";
     default:
       throw new Error(`unsupported platform ${process.platform}`)
   }
