@@ -15,10 +15,6 @@ function shell_exec(cmd) {
   });
 }
 
-function docker_cmd(cmd) {
-  shell_exec(`docker run --rm -v $(pwd):/opt/src/${package_name} --env PACKAGE_NAME=${package_name} --env PACKAGE_VERSION=${version} -w /opt/src/${package_name} ${env_image} ${cmd}`)
-}
-
 try {
   const package_name = core.getInput('package_name')
   const build_arch = core.getInput('arch');
@@ -31,8 +27,9 @@ try {
   console.log(`Building dependencies for ${package_name} Version ${version} with compiler ${build_compiler} on ${build_arch}.`);
 
   const build_script = `.ac_build/scripts/dependencies-linux-${build_arch}.sh`;
-  const gitea_username = core.getInput('username')
-  const gitea_password = core.getInput('password')
+  const gitea_username = core.getInput('username');
+  const gitea_password = core.getInput('password');
+  const cwd = process.cwd();
 
   if (gitea_username && gitea_password)
   {
@@ -42,6 +39,11 @@ try {
   }
 
   shell_exec(`docker pull ${env_image}`)
+
+  function docker_cmd(cmd) {
+    shell_exec(`docker run --rm -v ${cwd}:/opt/src/${package_name} --env PACKAGE_NAME=${package_name} --env PACKAGE_VERSION=${version} -w /opt/src/${package_name} ${env_image} ${cmd}`)
+  }
+
   docker_cmd(`ls -la`)
   docker_cmd(`bash ${build_script}`)
 
