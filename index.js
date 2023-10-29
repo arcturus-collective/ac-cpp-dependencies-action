@@ -7,7 +7,7 @@ try {
   const build_arch = core.getInput('arch');
   const build_compiler = core.getInput('compiler');
 
-  const env_image = 'gitea.arcturuscollective.com/arcturus-collective/linux-' + build_compiler + '-' + arch + ':latest'
+  const env_image = 'gitea.arcturuscollective.com/arcturus-collective/linux-' + build_compiler + '-' + build_arch + ':latest'
 
   const version = fs.readFileSync('VERSION', 'utf8')
 
