@@ -52,11 +52,23 @@ try {
   const gitea_password = core.getInput('password');
   const cwd = process.cwd();
 
-  if (gitea_username && gitea_password)
-  {
-    shell_exec(`git -C .ac_build pull || git clone https://${gitea_username}:${gitea_password}@gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
-  } else {
-    shell_exec('git -C .ac_build pull || git clone https://gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build')
+  try {
+    shell_exec(`git -C .ac_build pull`);
+  } catch (error) {
+    let login = '';
+    if (gitea_username)
+    {
+      login = login + gitea_username;
+    }
+    if (gitea_password)
+    {
+      login = login + ':' + gitea_password;
+    }
+    if (login)
+    {
+      login = login + '@';
+    }
+    shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
   }
 
   shell_exec(`ls -la .ac_build`)
