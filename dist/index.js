@@ -30201,7 +30201,7 @@ async function run() {
     const cwd = process.cwd();
 
     const res = shell_exec(`git -C .ac_build pull`);
-    res.catch((error) => {
+    await res.catch((error) => {
       let login = '';
       if (gitea_username)
       {
