@@ -30192,6 +30192,9 @@ try {
     shell_exec('git -C .ac_build pull || git clone https://gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build')
   }
 
+  shell_exec(`ls -la .ac_build`)
+  shell_exec(`ls -la .ac_build/scripts`)
+
   // Now actually execute the script
   shell_exec(`${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version});
 
