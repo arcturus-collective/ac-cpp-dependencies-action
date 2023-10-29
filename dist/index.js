@@ -30155,6 +30155,7 @@ try {
   const package_name = core.getInput('package_name')
   const build_arch = core.getInput('arch');
   const build_compiler = core.getInput('compiler');
+  const artifactory_token = core.getInput('artifactory_token');
 
   // Get the OS we are running on
   let build_os = "";
@@ -30211,7 +30212,7 @@ try {
   shell_exec(`ls -la .ac_build/scripts`)
 
   // Now actually execute the script
-  shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version});
+  shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, ARTIFACTORY_TOKEN: artifactory_token});
 
 } catch (error) {
   core.setFailed(error.message);
