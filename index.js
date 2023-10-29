@@ -13,14 +13,14 @@ async function shell_exec_passthrough(cmd, env) {
     child.stdout.on('data', data => console.log(data));
     child.stderr.on('data', data => console.log(data));
     child.on('error', function(error) {
-      throw new Error(error)
+      reject(error)
     });
     child.on('close', exitCode => {
       if (exitCode == 0)
       {
         resolve(exitCode);
       } else {
-        throw new Error(`Process exited with code ${exitCode}`)
+        reject(`Process exited with code ${exitCode}`);
       }
     });
   });
