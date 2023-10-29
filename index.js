@@ -67,8 +67,7 @@ async function run() {
     const gitea_password = core.getInput('password');
     const cwd = process.cwd();
 
-    const res = shell_exec(`git -C .ac_build pull`);
-    await res.catch((error) => {
+    await shell_exec(`git -C .ac_build pull`).catch((error) => {
       let login = '';
       if (gitea_username)
       {
@@ -82,7 +81,7 @@ async function run() {
       {
         login = login + '@';
       }
-      shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
+      return shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
     });
 
     await shell_exec(`ls -la .ac_build`)
