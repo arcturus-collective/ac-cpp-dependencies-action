@@ -30136,7 +30136,7 @@ const github = __nccwpck_require__(7133);
 const fs = __nccwpck_require__(7147);
 const { exec } = __nccwpck_require__(2081)
 
-async function shell_exec_passthrough(cmd, env) {
+function shell_exec(cmd, env = {}) {
   return new Promise((resolve, reject) => {
     console.log(`Running command ${cmd}`)
     runenv = { ...process.env, ...env };
@@ -30151,17 +30151,14 @@ async function shell_exec_passthrough(cmd, env) {
     child.on('close', exitCode => {
       if (exitCode == 0)
       {
+        console.log(`Command completed with exit code ${exit_code}`);
         resolve(exitCode);
       } else {
+        console.log(`Rejecting promise, process exited with code ${exitCode}`)
         reject(`Process exited with code ${exitCode}`);
       }
     });
   });
-}
-
-async function shell_exec(cmd, env = {}) {
-  const exit_code = await shell_exec_passthrough(cmd, env);
-  console.log(`Command completed with exit code ${exit_code}`);
 }
 
 async function run() {
@@ -30203,7 +30200,7 @@ async function run() {
     const gitea_password = core.getInput('password');
     const cwd = process.cwd();
 
-    const res = await shell_exec(`git -C .ac_build pull`);
+    const res = shell_exec(`git -C .ac_build pull`);
     res.catch((error) => {
       let login = '';
       if (gitea_username)
