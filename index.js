@@ -6,12 +6,12 @@ const { exec } = require("child_process")
 function shell_exec(cmd) {
   exec("cmd", (error, stdout, stderr) => {
     if (error) {
-      throw new Error('error: ${error.message}')
+      throw new Error(`error: ${error.message}`)
     }
     if (stderr) {
-        console.log('${stderr}');
+        console.log(`${stderr}`);
     }
-    console.log('${stdout}');
+    console.log(`${stdout}`);
   });
 }
 
@@ -32,7 +32,7 @@ try {
 
   if (gitea_username && gitea_password)
   {
-    shell_exec('git -C .ac_build pull || git clone https://' + gitea_username + ':' + gitea_password + '@gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build')
+    shell_exec(`git -C .ac_build pull || git clone https://${gitea_username}:${gitea_password}@gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
   } else {
     shell_exec('git -C .ac_build pull || git clone https://gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build')
   }
