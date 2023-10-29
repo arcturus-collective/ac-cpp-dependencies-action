@@ -27,12 +27,14 @@ try {
   let build_os = "";
   let script_exec = "";
   let script_ext = "";
+  let entrypoint = "";
   switch (process.platform)
   {
     case "linux":
       build_os = "linux";
       script_exec = "bash";
       script_ext = "sh";
+      entrypoint = "/opt/entrypoint.sh "
       break;
     case "win32":
       build_os = "windows";
@@ -76,7 +78,7 @@ try {
   shell_exec(`ls -la .ac_build/scripts`)
 
   // Now actually execute the script
-  shell_exec(`${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version});
+  shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version});
 
 } catch (error) {
   core.setFailed(error.message);
