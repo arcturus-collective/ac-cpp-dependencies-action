@@ -30145,7 +30145,7 @@ async function shell_exec_passthrough(cmd, env) {
     child.stderr.setEncoding('utf8');
     child.stdout.on('data', data => console.log(data));
     child.stderr.on('data', data => console.log(data));
-    child.on('error', error => reject(error));
+    child.on('error', error => {throw new Error(error)});
     child.on('close', exitCode => {
         resolve(exitCode);
     });
