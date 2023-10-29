@@ -20,13 +20,13 @@ try {
   const build_arch = core.getInput('arch');
   const build_compiler = core.getInput('compiler');
 
-  const env_image = 'gitea.arcturuscollective.com/arcturus-collective/linux-' + build_compiler + '-' + build_arch + ':latest'
+  const env_image = `gitea.arcturuscollective.com/arcturus-collective/linux-${build_compiler}-${build_arch}:latest`
 
   const version = fs.readFileSync('VERSION', 'utf8').trim()
 
   console.log(`Building dependencies for ${package_name} Version ${version} with compiler ${build_compiler} on ${build_arch}.`);
 
-  const build_script = '.ac_build/scripts/dependencies-linux-' + '-' + build_arch + '.sh';
+  const build_script = `.ac_build/scripts/dependencies-linux-${build_arch}.sh`;
   const gitea_username = core.getInput('username')
   const gitea_password = core.getInput('password')
 
