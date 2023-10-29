@@ -6,13 +6,17 @@ const { exec } = require("child_process")
 function shell_exec(cmd) {
   exec(cmd, (error, stdout, stderr) => {
     if (error) {
-      throw new Error(`error: ${error.message}`)
+      throw new Error(error.message)
     }
     if (stderr) {
         console.log(`${stderr}`);
     }
     console.log(`${stdout}`);
   });
+}
+
+function docker_cmd(cmd) {
+  shell_exec(`docker run --rm -v $(pwd):/opt/src/${package_name} --env PACKAGE_NAME=${package_name} --env PACKAGE_VERSION=${version} -w /opt/src/${package_name} ${env_image} ${cmd}`)
 }
 
 try {
@@ -38,7 +42,8 @@ try {
   }
 
   shell_exec(`docker pull ${env_image}`)
-  shell_exec(`docker run --rm -v $(pwd):/opt/src/${package_name} --env PACKAGE_NAME=${package_name} --env PACKAGE_VERSION=${version} -w /opt/src/${package_name} ${env_image} bash ${build_script}`)
+  docker_cmd(`ls -la`)
+  docker_cmd(`bash ${build_script}`)
 
 } catch (error) {
   core.setFailed(error.message);
