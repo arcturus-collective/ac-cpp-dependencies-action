@@ -1,6 +1,9 @@
 name: 'Build and test C++ Project'
 description: 'Builds and tests C++ projects following a specific format.'
 inputs:
+  mode:
+    description: 'Installing dependencies, building, or upload.'
+    required: True
   package_name:
     description: 'The name of the package'
     required: true

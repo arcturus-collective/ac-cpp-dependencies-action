@@ -34,6 +34,23 @@ async function run() {
     const build_arch = core.getInput('arch');
     const build_compiler = core.getInput('compiler');
     const artifactory_token = core.getInput('artifactory_token');
+    const mode = core.getInput('mode');
+
+    let script_type = "";
+    switch (mode)
+    {
+      case "dependencies":
+        script_type = "dependencies";
+        break;
+      case "build":
+        script_type =  "build";
+        break;
+      case "upload":
+        script_type =  "package";
+        break;
+      default:
+        throw new Error(`unsupported mode ${mode}`)
+    }
 
     // Get the OS we are running on
     let build_os = "";
@@ -52,6 +69,7 @@ async function run() {
         build_os = "windows";
         script_exec = "powershell -File";
         script_ext = "ps1";
+        break;
       default:
         throw new Error(`unsupported platform ${process.platform}`)
     }
@@ -60,9 +78,14 @@ async function run() {
 
     const version = fs.readFileSync('VERSION', 'utf8').trim()
 
-    console.log(`Building dependencies for ${package_name} Version ${version} with compiler ${build_compiler} on ${build_os} ${build_arch}.`);
+    if (mode == "dependencies")
+    {
+      console.log(`Building dependencies for ${package_name} Version ${version} with compiler ${build_compiler} on ${build_os} ${build_arch}.`);
+    } else {
+      console.log(`Building ${package_name} Version ${version} with compiler ${build_compiler} on ${build_os} ${build_arch}.`);
+    }
 
-    const build_script = `.ac_build/scripts/dependencies-${build_os}-${build_arch}.${script_ext}`;
+    const build_script = `.ac_build/scripts/${script_type}-${build_os}-${build_arch}.${script_ext}`;
     const gitea_username = core.getInput('username');
     const gitea_password = core.getInput('password');
     const cwd = process.cwd();
