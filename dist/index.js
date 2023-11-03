@@ -30240,8 +30240,11 @@ async function run() {
       return shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
     });
 
-    await shell_exec(`ls -la .ac_build`)
-    await shell_exec(`ls -la .ac_build/scripts`)
+    if (build_os == "linux")
+    {
+      await shell_exec(`ls -la .ac_build`)
+      await shell_exec(`ls -la .ac_build/scripts`)
+    }
 
     // Now actually execute the script
     await shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, COMPILER: build_compiler, ARTIFACTORY_TOKEN: artifactory_token});
