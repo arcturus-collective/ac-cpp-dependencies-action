@@ -30148,9 +30148,12 @@ function shell_exec(cmd, env = {}) {
     child.on('error', function(error) {
       reject(error)
     });
-    child.on('close', exit_code => {
-      if (exit_code == 0)
+    child.on('close', (exit_code, signal) => {
+      if (exit_code === null)
       {
+        console.log(`Rejecting promise, process exited with signal ${signal}`)
+        reject(`Process exited with signal ${signal}`);
+      } else if (exit_code == 0) {
         console.log(`Command completed with exit code ${exit_code}`);
         resolve(exit_code);
       } else {
