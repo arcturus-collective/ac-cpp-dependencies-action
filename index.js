@@ -117,7 +117,7 @@ async function run() {
     }
 
     // Now actually execute the script
-    await shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, COMPILER: build_compiler, ARTIFACTORY_TOKEN: artifactory_token});
+    await shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, COMPILER: build_compiler, ARTIFACTORY_TOKEN: gitea_password});
 
   } catch (error) {
     core.setFailed(error.message);
