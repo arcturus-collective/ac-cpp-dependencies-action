@@ -36,7 +36,6 @@ async function run() {
     const package_name = core.getInput('package_name')
     const build_arch = core.getInput('arch');
     const build_compiler = core.getInput('compiler');
-    const artifactory_token = core.getInput('artifactory_token');
     const mode = core.getInput('mode');
 
     let subcommand = "";
