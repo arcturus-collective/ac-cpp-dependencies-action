@@ -30172,17 +30172,17 @@ async function run() {
     const artifactory_token = core.getInput('artifactory_token');
     const mode = core.getInput('mode');
 
-    let script_type = "";
+    let subcommand = "";
     switch (mode)
     {
       case "dependencies":
-        script_type = "dependencies";
+        subcommand = "depends";
         break;
       case "build":
-        script_type =  "build";
+        subcommand =  "build";
         break;
       case "upload":
-        script_type =  "package";
+        subcommand =  "upload";
         break;
       default:
         throw new Error(`unsupported mode ${mode}`)
@@ -30192,19 +30192,20 @@ async function run() {
     let build_os = "";
     let script_exec = "";
     let script_ext = "";
-    let entrypoint = "";
+    let build_dir = ""
     switch (process.platform)
     {
       case "linux":
         build_os = "linux";
         script_exec = "bash";
         script_ext = "sh";
-        entrypoint = "/opt/entrypoint.sh "
+        build_dir = `/opt/builds/${package_name}`
         break;
       case "win32":
         build_os = "windows";
         script_exec = "powershell -File";
         script_ext = "ps1";
+        build_dir = `C:\\builds\\${package_name}`
         break;
       default:
         throw new Error(`unsupported platform ${process.platform}`)
@@ -30221,12 +30222,12 @@ async function run() {
       console.log(`Building ${package_name} Version ${version} with compiler ${build_compiler} on ${build_os} ${build_arch}.`);
     }
 
-    const build_script = `.ac_build/scripts/${script_type}-${build_os}-${build_arch}.${script_ext}`;
+    const build_script = `.acpkg/ci/acbuild.${script_ext}`;
     const gitea_username = core.getInput('username');
     const gitea_password = core.getInput('password');
     const cwd = process.cwd();
 
-    await shell_exec(`git -C .ac_build pull`).catch((error) => {
+    await shell_exec(`git -C .acpkg pull`).catch((error) => {
       let login = '';
       if (gitea_username)
       {
@@ -30240,17 +30241,16 @@ async function run() {
       {
         login = login + '@';
       }
-      return shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/drone-templates.git .ac_build`)
+      return shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/acpkg.git .acpkg`)
     });
 
     if (build_os == "linux")
     {
-      await shell_exec(`ls -la .ac_build`)
-      await shell_exec(`ls -la .ac_build/scripts`)
+      await shell_exec(`ls -la .acpkg`)
     }
 
     // Now actually execute the script
-    await shell_exec(`${entrypoint}${script_exec} ${build_script}`, {PACKAGE_NAME: package_name, PACKAGE_VERSION: version, COMPILER: build_compiler, ARTIFACTORY_TOKEN: gitea_password});
+    await shell_exec(`${script_exec} ${build_script} acbuild ${package_name} ${version} --build-dir ${build_dir} ${subcommand}`, {PACKAGE_USERNAME: gitea_username, PACKAGE_PASSWORD: gitea_password, COMPILER: build_compiler});
 
   } catch (error) {
     core.setFailed(error.message);
