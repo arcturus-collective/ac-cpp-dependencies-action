@@ -30134,11 +30134,12 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(1681);
 const github = __nccwpck_require__(7133);
 const fs = __nccwpck_require__(7147);
-const { exec } = __nccwpck_require__(2081)
+const { spawn } = __nccwpck_require__(2081)
 
 function shell_exec(cmd, env = {}) {
   return new Promise((resolve, reject) => {
-    console.log(`Running command ${cmd}`)
+    cmd_string = cmd.join(' ')
+    console.log(`Running command ${cmd_string}`)
     runenv = { ...process.env, ...env };
     const child = spawn(cmd[0], cmd.slice(1), { env: runenv });
     child.stdout.setEncoding('utf8');

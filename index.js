@@ -1,11 +1,12 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
-const { exec } = require("child_process")
+const { spawn } = require("child_process")
 
 function shell_exec(cmd, env = {}) {
   return new Promise((resolve, reject) => {
-    console.log(`Running command ${cmd}`)
+    cmd_string = cmd.join(' ')
+    console.log(`Running command ${cmd_string}`)
     runenv = { ...process.env, ...env };
     const child = spawn(cmd[0], cmd.slice(1), { env: runenv });
     child.stdout.setEncoding('utf8');
