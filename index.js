@@ -7,7 +7,7 @@ function shell_exec(cmd, env = {}) {
   return new Promise((resolve, reject) => {
     console.log(`Running command ${cmd}`)
     runenv = { ...process.env, ...env };
-    const child = exec(cmd, { env: runenv });
+    const child = spawn(cmd[0], cmd.slice(1), { env: runenv });
     child.stdout.setEncoding('utf8');
     child.stderr.setEncoding('utf8');
     child.stdout.on('data', data => console.log(data));
@@ -93,7 +93,7 @@ async function run() {
     const gitea_password = core.getInput('password');
     const cwd = process.cwd();
 
-    await shell_exec(`git -C .acpkg pull`).catch((error) => {
+    await shell_exec([`git`, `-C`, `.acpkg`, `pull`]).catch((error) => {
       let login = '';
       if (gitea_username)
       {
@@ -107,16 +107,21 @@ async function run() {
       {
         login = login + '@';
       }
-      return shell_exec(`git clone https://${login}gitea.arcturuscollective.com/arcturus-collective/acpkg.git .acpkg`)
+      return shell_exec([`git`, `clone`,
+                        `https://${login}gitea.arcturuscollective.com/arcturus-collective/acpkg.git`,
+                        `.acpkg`])
     });
 
     if (build_os == "linux")
     {
-      await shell_exec(`ls -la .acpkg`)
+      await shell_exec([`ls`, `-la`, `.acpkg`])
     }
 
     // Now actually execute the script
-    await shell_exec(`${script_exec} ${build_script} acbuild ${package_name} ${version} --build-dir ${build_dir} ${subcommand}`, {PACKAGE_USERNAME: gitea_username, PACKAGE_PASSWORD: gitea_password, COMPILER: build_compiler});
+    await shell_exec([script_exec, build_script,
+                     `acbuild`, package_name, `${version}`, `--build-dir`,
+                     build_dir, subcommand],
+                    {PACKAGE_USERNAME: gitea_username, PACKAGE_PASSWORD: gitea_password, COMPILER: build_compiler});
 
   } catch (error) {
     core.setFailed(error.message);
