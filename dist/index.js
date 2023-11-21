@@ -30161,6 +30161,7 @@ function shell_exec(cmd, env = {}) {
       } else {
         console.log(`Rejecting promise, process exited with code ${exit_code}`)
         reject(`Process exited with code ${exit_code}`);
+        console.log(`Process environment: ${runenv}`)
       }
     });
   });
