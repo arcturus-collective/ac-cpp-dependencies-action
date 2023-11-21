@@ -30153,6 +30153,7 @@ function shell_exec(cmd, env = {}) {
       if (exit_code === null)
       {
         console.log(`Rejecting promise, process exited with signal ${signal}`)
+        console.log(`Process environment: ${runenv}`)
         reject(`Process exited with signal ${signal}`);
       } else if (exit_code == 0) {
         console.log(`Command completed with exit code ${exit_code}`);
@@ -30192,7 +30193,8 @@ async function run() {
     let build_os = "";
     let script_exec = "";
     let script_ext = "";
-    let build_dir = ""
+    let build_dir = "";
+    let build_script = "";
     switch (process.platform)
     {
       case "linux":
@@ -30200,12 +30202,14 @@ async function run() {
         script_exec = "bash";
         script_ext = "sh";
         build_dir = `/opt/builds/${package_name}`
+        build_script = `.acpkg/ci/acbuild.${script_ext}`;
         break;
       case "win32":
         build_os = "windows";
         script_exec = "powershell -File";
         script_ext = "ps1";
         build_dir = `C:\\builds\\${package_name}`
+        build_script = `.\\.acpkg\\ci\\acbuild.${script_ext}`;
         break;
       default:
         throw new Error(`unsupported platform ${process.platform}`)
@@ -30222,7 +30226,6 @@ async function run() {
       console.log(`Building ${package_name} Version ${version} with compiler ${build_compiler} on ${build_os} ${build_arch}.`);
     }
 
-    const build_script = `.acpkg/ci/acbuild.${script_ext}`;
     const gitea_username = core.getInput('username');
     const gitea_password = core.getInput('password');
     const cwd = process.cwd();
