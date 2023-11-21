@@ -74,7 +74,7 @@ async function run() {
         break;
       case "win32":
         build_os = "windows";
-        script_exec = "powershell -File";
+        script_exec = "powershell";
         script_ext = "ps1";
         build_dir = `C:\\builds\\${package_name}`
         build_script = `.\\.acpkg\\ci\\acbuild.${script_ext}`;
