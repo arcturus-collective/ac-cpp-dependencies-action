@@ -19,6 +19,12 @@ inputs:
   password:
     description: 'Password or personal access token used to log to the gitea instance'
     required: false
+  deployer:
+    description: 'The deployer to use'
+    required: false
+  artifacts_dir:
+    description: 'Where to write artifacts'
+    required: false
 runs:
   using: 'node20'
   main: 'dist/index.js'

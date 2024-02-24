@@ -53,6 +53,9 @@ async function run() {
       case "upload":
         subcommand =  "upload";
         break;
+      case "deploy":
+        subcommand =  "deploy";
+        break;
       default:
         throw new Error(`unsupported mode ${mode}`)
     }
@@ -119,14 +122,17 @@ async function run() {
 
     if (build_os == "linux")
     {
-      await shell_exec([`ls`, `-la`, `.acpkg`])
+      await shell_exec([`ls`, `-la`, `.acpkg`]);
     }
+
+    const deployer = core.getInput('deployer');
+    const artifacts_dir = core.getInput('artifacts_dir');
 
     // Now actually execute the script
     await shell_exec([script_exec, build_script,
                      `acbuild`, package_name, `${version}`, `--build-dir`,
                      build_dir, subcommand],
-                    {PACKAGE_USERNAME: gitea_username, PACKAGE_PASSWORD: gitea_password, COMPILER: build_compiler});
+                    {PACKAGE_USERNAME: gitea_username, PACKAGE_PASSWORD: gitea_password, COMPILER: build_compiler, PACKAGE_DEPLOYER: deployer, PACKAGE_ARTIFACTS_DIR: artifacts_dir});
 
   } catch (error) {
     core.setFailed(error.message);
